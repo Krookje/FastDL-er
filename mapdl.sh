@@ -25,9 +25,8 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
             wget "${FASTDL}${mapname}.bsp.bz2"
             bzip2 -d $mapname.bsp.bz2                
             mv $mapname.bsp $ENDPOINT
-            rm $mapname.bsp.bz2
         fi
-    done < "$LIST"                                                                                                       
+    done < "$MAPLIST"                                                                                                       
     echo "Map List downloaded."                                                                                          
     exit 0
  else
