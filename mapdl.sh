@@ -18,19 +18,27 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     do
         echo "Selecting map: $mapname"
         if curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp.bz2"; then
-            wget "${FASTDL}${mapname}.bsp.bz2"
+            echo -e "-- Collecting BZip2 package..."
+            wget -q --show-progress "${FASTDL}${mapname}.bsp.bz2"
+            echo -e "-- Unpacking BZip2 package..."
             bzip2 -d $mapname.bsp.bz2
+            echo -e "-- Moving unpacked file to endpoint..."
             mv $mapname.bsp $ENDPOINT
+            echo -e "-- Done.\n"
+        elif curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp"; then
+            echo -e "-- BZip2 package was not found on FastDL, collecting BSP file instead..."
+            wget -q --show-progress "${FASTDL}${mapname}.bsp"
+            echo -e "-- Moving file to endpoint..."
+            mv $mapname.bsp $ENDPOINT
+            echo -e "-- Done.\n"
         else
-            echo "BZip2 package not found on FastDL. Looking for BSP file instead."
-            wget "${FASTDL}${mapname}.bsp"
-            mv $mapname.bsp $ENDPOINT
+            echo -e "-- Map was not found in provided FastDL Respository. Skipped.\n"
         fi
     done < "$MAPLIST"                                                                                                       
-    echo "Map List downloaded."                                                                                          
+    echo -e "\n\nMap List completed."                                                                                          
     exit 0
  else
-    echo "Aborted."
+    echo -e "Aborted."
     exit 0
 fi
  
