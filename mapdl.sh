@@ -41,7 +41,3 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo -e "Aborted."
     exit 0
 fi
- 
- 
- 
- 
