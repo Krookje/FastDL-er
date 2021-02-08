@@ -17,13 +17,13 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     while IFS= read -r mapname
     do
         echo "Selecting map: $mapname"
-        if curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp"; then
-            wget "${FASTDL}${mapname}.bsp"
+        if curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp.bz2"; then
+            wget "${FASTDL}${mapname}.bsp.bz2"
+            bzip2 -d $mapname.bsp.bz2
             mv $mapname.bsp $ENDPOINT
         else
-            echo ".bsp file not available on FastDL. Looking for BZ2 package instead."
-            wget "${FASTDL}${mapname}.bsp.bz2"
-            bzip2 -d $mapname.bsp.bz2                
+            echo "BZip2 package not found on FastDL. Looking for BSP file instead."
+            wget "${FASTDL}${mapname}.bsp"
             mv $mapname.bsp $ENDPOINT
         fi
     done < "$MAPLIST"                                                                                                       
