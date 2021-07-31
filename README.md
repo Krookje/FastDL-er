@@ -6,11 +6,13 @@ BASH script to automatically download a list of specified maps from a FastDL rep
 - bzip2
 
 ```
-sudo apt install wget curl bzip2
+sudo apt install curl bzip2
 ```
 
 ## Usage
 ```./mapdl.sh```
+
+A good idea would be to make sure your list of maps does not contain any unnecessary whitespace. Run it through here: https://onlinetexttools.com/remove-all-whitespace-from-text
 
 ## Can I use this in srcds_run when launching my SourceMod server?
 
