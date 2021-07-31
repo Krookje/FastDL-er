@@ -2,7 +2,7 @@
 
 echo "Welcome to FastDL-er! https://github.com/1zc/FastDL-er"
 echo " "
-read -p 'FastDL URL (eg: https://fastdlv2.gflclan.com/file/gflfastdlv2/csgo/maps/) (Please ensure the URL ends with a /): ' FASTDL
+read -p 'FastDL URL (eg: https://fastdlv2.gflclan.com/file/gflfastdl/csgo/maps/) (Please ensure the URL ends with a /): ' FASTDL
 read -p 'Maplist location (eg: csgo/mapcycle.txt): ' MAPLIST
 read -p 'Location to place downloaded maps (eg: csgo/maps): ' ENDPOINT
 
@@ -16,8 +16,9 @@ read -r -p "Confirm the selected options and begin downloading? [y/N] " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     while IFS= read -r mapname
     do
-        echo "Selecting map: $mapname"
         mapname=${mapname%$'\r'}
+        mapname="${mapname%"S{mapname##*[![:space:]]}"}"
+        echo "Selecting map: $mapname"
         if curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp.bz2"; then
             echo -e "-- Collecting BZip2 package..."
             curl -k "${FASTDL}${mapname}.bsp.bz2" -o "${mapname}.bsp.bz2"
