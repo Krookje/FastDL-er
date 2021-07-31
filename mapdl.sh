@@ -2,7 +2,7 @@
 
 echo "Welcome to FastDL-er! https://github.com/1zc/FastDL-er"
 echo " "
-read -p 'FastDL URL (eg: https://fastdlv2.gflclan.com/file/gflfastdl/csgo/maps/) (Please ensure the URL ends with a /): ' FASTDL
+read -p 'FastDL URL (eg: https://fastdlv2.gflclan.com/file/gflfastdlv2/csgo/maps/) (Please ensure the URL ends with a /): ' FASTDL
 read -p 'Maplist location (eg: csgo/mapcycle.txt): ' MAPLIST
 read -p 'Location to place downloaded maps (eg: csgo/maps): ' ENDPOINT
 
@@ -17,9 +17,10 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     while IFS= read -r mapname
     do
         echo "Selecting map: $mapname"
+        mapname=${mapname%$'\r'}
         if curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp.bz2"; then
             echo -e "-- Collecting BZip2 package..."
-            wget -q --show-progress "${FASTDL}${mapname}.bsp.bz2"
+            curl -k "${FASTDL}${mapname}.bsp.bz2" -o "${mapname}.bsp.bz2"
             echo -e "-- Unpacking BZip2 package..."
             bzip2 -d $mapname.bsp.bz2
             echo -e "-- Moving unpacked file to endpoint..."
@@ -27,7 +28,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
             echo -e "-- Done.\n"
         elif curl --output /dev/null --silent --head --fail "${FASTDL}${mapname}.bsp"; then
             echo -e "-- BZip2 package was not found on FastDL, collecting BSP file instead..."
-            wget -q --show-progress "${FASTDL}${mapname}.bsp"
+            curl -k "${FASTDL}${mapname}.bsp" -o "${mapname}.bsp"
             echo -e "-- Moving file to endpoint..."
             mv $mapname.bsp $ENDPOINT
             echo -e "-- Done.\n"
